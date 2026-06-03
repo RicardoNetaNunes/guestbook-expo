@@ -10,7 +10,6 @@ const requiredFiles = [
   "public/admin.js",
   "public/common.js",
   "public/config.js",
-  "public/qr-page.js",
   "public/styles.css",
   "public/logo.png",
   "public/qr.png",

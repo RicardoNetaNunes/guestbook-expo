@@ -450,11 +450,31 @@ button:focus-visible,
   display: grid;
   gap: 1rem;
   justify-items: center;
-  text-align: center;
 }
 
-.qr-stage img {
-  width: min(86vw, 28rem);
+.qr-card {
+  width: min(92vw, 64rem);
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.qr-visuals {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 24rem);
+  gap: 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-copy {
+  text-align: center;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.qr-code {
+  width: min(100%, 24rem);
   background: white;
   padding: 1rem;
   border-radius: 2rem;
@@ -462,7 +482,7 @@ button:focus-visible,
 }
 
 .qr-logo {
-  width: min(12rem, 40vw);
+  width: min(100%, 14rem);
   padding: 0;
   background: transparent;
   border-radius: 0;
@@ -549,6 +569,19 @@ button:focus-visible,
   .admin-toolbar {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .qr-card {
+    width: min(94vw, 32rem);
+  }
+
+  .qr-visuals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qr-logo,
+  .qr-code {
+    justify-self: center;
   }
 
   .poster-swoosh-blue {

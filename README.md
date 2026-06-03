@@ -32,7 +32,6 @@ guestbook-expo/
     admin.js
     common.js
     config.js
-    qr-page.js
     styles.css
     logo.png
     qr.png
