@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Livro de Visitas Multimédia</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="poster-dots poster-dots-top" aria-hidden="true"></div>
+    <div class="poster-swoosh poster-swoosh-blue" aria-hidden="true"></div>
+    <div class="poster-swoosh poster-swoosh-red" aria-hidden="true"></div>
+    <div class="poster-ribbon" aria-hidden="true"></div>
+    <main class="shell">
+      <section class="brand-lockup">
+        <img class="event-logo" src="logo.png" alt="Dia da Multimédia 2026">
+        <div class="brand-copy">
+          <p class="eyebrow">Dia da Multimédia 2026</p>
+          <p class="brand-kicker">IEFP Sala 114</p>
+        </div>
+      </section>
+
+      <section class="hero card">
+        <p class="eyebrow">Livro de Visitas Digital</p>
+        <h1>Deixa a tua mensagem para o Dia da Multimédia.</h1>
+        <p class="lede">Partilha uma ideia, escolhe um estado de espírito e junta-te ao mural. Todas as mensagens passam primeiro pela moderação.</p>
+        <div class="mood-meter" aria-live="polite">
+          <div>
+            <strong id="stats-count">0</strong>
+            <span>mensagens aprovadas no mural</span>
+          </div>
+          <div id="stats-bars" class="meter-bars"></div>
+        </div>
+      </section>
+
+      <section id="form-card" class="card">
+        <h2>Deixa a tua marca</h2>
+        <p class="admin-note">As mensagens entram primeiro em moderacao antes de aparecerem publicamente.</p>
+        <form id="feedback-form" novalidate>
+          <div class="field">
+            <label for="name">Nome</label>
+            <input id="name" name="name" type="text" maxlength="60" autocomplete="name" required placeholder="Escreve o teu nome">
+          </div>
+
+          <fieldset class="field">
+            <legend>Como te sentiste após esta visita?</legend>
+            <div id="mood-options" class="mood-grid" role="radiogroup" aria-label="Escolhe o teu estado de espirito"></div>
+          </fieldset>
+
+          <div class="field">
+            <label for="comment">Mensagem</label>
+            <textarea id="comment" name="comment" rows="4" maxlength="280" required></textarea>
+            <div class="field-meta">
+              <span id="comment-help">Curta, criativa e com boa energia.</span>
+              <span id="char-count">0 / 280</span>
+            </div>
+          </div>
+
+          <div id="form-error" class="status error hidden" role="alert"></div>
+          <div id="form-success" class="status success hidden" aria-live="polite"></div>
+
+          <button id="submit-button" class="primary-button" type="submit">Enviar mensagem</button>
+        </form>
+      </section>
+
+      <section class="feed-header">
+        <div>
+          <p class="eyebrow">Mural ao Vivo</p>
+          <h2>Mensagens aprovadas da comunidade</h2>
+        </div>
+        <button id="refresh-button" class="ghost-button" type="button">Atualizar mural</button>
+      </section>
+
+      <section id="feed-empty" class="card empty-state hidden">
+        <h3>Ainda nao ha mensagens aprovadas.</h3>
+        <p>O mural esta a aquecer motores. A tua mensagem pode ser a primeira a aparecer assim que for aprovada.</p>
+      </section>
+
+      <section id="feed" class="feed" aria-live="polite"></section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="common.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

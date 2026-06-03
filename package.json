@@ -1,0 +1,23 @@
+{
+  "name": "guestbook-expo",
+  "version": "1.0.0",
+  "description": "Livro de visitas digital estatico para GitHub Pages + Supabase.",
+  "private": true,
+  "scripts": {
+    "qr": "node scripts/generate-qr.js",
+    "validate": "node scripts/validate-static.js"
+  },
+  "keywords": [
+    "guestbook",
+    "expo",
+    "supabase",
+    "github-pages",
+    "static-site"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "qrcode": "^1.5.4"
+  }
+}

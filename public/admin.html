@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel de Moderação</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="poster-dots poster-dots-top" aria-hidden="true"></div>
+    <div class="poster-swoosh poster-swoosh-blue" aria-hidden="true"></div>
+    <div class="poster-swoosh poster-swoosh-red" aria-hidden="true"></div>
+    <main class="shell admin-shell">
+      <section class="brand-lockup">
+        <img class="event-logo" src="logo.png" alt="Dia da Multimédia 2026">
+        <div class="brand-copy">
+          <p class="eyebrow">Moderação</p>
+          <p class="brand-kicker">Painel interno</p>
+        </div>
+      </section>
+
+      <section class="hero card">
+        <p class="eyebrow">Painel de Moderação</p>
+        <h1>Aprova, rejeita e acompanha o mural.</h1>
+        <p class="lede">Esta area usa autenticacao Supabase com email e password. So contas marcadas como admin conseguem moderar mensagens.</p>
+      </section>
+
+      <section id="auth-card" class="card admin-auth-card">
+        <p class="eyebrow">Login Admin</p>
+        <h2>Entrar para moderar</h2>
+        <p class="admin-note">Usa a conta de administracao criada no Supabase Auth.</p>
+        <form id="admin-login-form" class="admin-auth-grid" novalidate>
+          <div class="field">
+            <label for="admin-email">Email</label>
+            <input id="admin-email" name="email" type="email" autocomplete="email" required placeholder="admin@exemplo.pt">
+          </div>
+          <div class="field">
+            <label for="admin-password">Password</label>
+            <input id="admin-password" name="password" type="password" autocomplete="current-password" required placeholder="Palavra-passe">
+          </div>
+          <div id="auth-status" class="status hidden" aria-live="polite"></div>
+          <button id="login-button" class="primary-button" type="submit">Entrar no painel</button>
+        </form>
+      </section>
+
+      <section id="session-card" class="card hidden">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Sessao</p>
+            <h2 id="session-title">Admin autenticado</h2>
+          </div>
+          <button id="logout-button" class="ghost-button" type="button">Terminar sessao</button>
+        </div>
+        <p id="session-copy" class="admin-note"></p>
+      </section>
+
+      <section id="moderation-panel" class="card admin-panel hidden">
+        <div class="tabs" role="tablist" aria-label="Filtros por estado">
+          <button class="tab-button active" data-status="pending" role="tab" aria-selected="true">Pendentes</button>
+          <button class="tab-button" data-status="approved" role="tab" aria-selected="false">Aprovadas</button>
+          <button class="tab-button" data-status="rejected" role="tab" aria-selected="false">Rejeitadas</button>
+        </div>
+        <div id="admin-status" class="status hidden" aria-live="polite"></div>
+        <div id="admin-list" class="admin-list"></div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="common.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
