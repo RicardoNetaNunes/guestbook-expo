@@ -498,8 +498,8 @@ button:focus-visible,
 
 .qr-visuals {
   display: grid;
-  grid-template-columns: minmax(15.5rem, 18rem) minmax(0, 24rem);
-  gap: 1.5rem;
+  grid-template-columns: 21rem 21rem;
+  gap: 2rem;
   align-items: start;
   justify-content: center;
 }
@@ -508,7 +508,7 @@ button:focus-visible,
   display: grid;
   gap: 0.9rem;
   align-items: start;
-  width: min(100%, 16rem);
+  width: 21rem;
   justify-self: center;
 }
 
@@ -520,7 +520,7 @@ button:focus-visible,
 }
 
 .qr-code {
-  width: min(100%, 22rem);
+  width: min(100%, 21rem);
   background: white;
   padding: 1rem;
   border-radius: 2rem;
@@ -561,7 +561,7 @@ button:focus-visible,
 }
 
 .qr-review-stage {
-  min-height: 16rem;
+  min-height: 21rem;
   display: grid;
   align-items: start;
 }
@@ -571,7 +571,7 @@ button:focus-visible,
   width: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
-  padding: 1.15rem 1rem 1rem;
+  padding: 1.25rem 1.15rem 1.1rem;
   border-radius: 0.5rem 1.2rem 0.7rem 1rem;
   box-shadow:
     0 1.2rem 2.4rem rgba(17, 36, 61, 0.16),
@@ -634,7 +634,7 @@ button:focus-visible,
 }
 
 .qr-postit-mood {
-  font-size: 1.55rem;
+  font-size: 1.8rem;
   line-height: 1;
 }
 
@@ -643,20 +643,20 @@ button:focus-visible,
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 
 .qr-postit-text {
   margin: 0;
-  font-size: 1.08rem;
-  line-height: 1.48;
+  font-size: 1.22rem;
+  line-height: 1.52;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
 .qr-postit-time {
   margin: 1rem 0 0;
-  font-size: 0.88rem;
+  font-size: 1rem;
   opacity: 0.78;
 }
 
@@ -770,7 +770,7 @@ button:focus-visible,
   }
 
   .qr-column {
-    width: min(100%, 17rem);
+    width: min(100%, 19rem);
   }
 
   .qr-mural-head {
