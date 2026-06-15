@@ -250,8 +250,7 @@
 
       const createdAt = new Date();
       const filename = buildPdfFileName(createdAt, filters);
-      const moodImages = await buildMoodImages(entries);
-      window.pdfMake.createPdf(buildPdfDocument(entries, createdAt, filters, moodImages)).download(filename);
+      window.pdfMake.createPdf(buildPdfDocument(entries, createdAt, filters)).download(filename);
       setStatus(`PDF gerado com ${entries.length} mensagem(ns).`, "success");
     } catch (error) {
       setStatus(api.humanizeError(error, "Nao foi possivel gerar o PDF."), "error");
@@ -300,39 +299,12 @@
     return data || [];
   }
 
-  async function buildMoodImages(entries) {
-    const uniqueMoods = Array.from(new Set(entries.map((entry) => entry.mood).filter(Boolean)));
-    const pairs = await Promise.all(uniqueMoods.map(async (mood) => [mood, await renderMoodImage(mood)]));
-    return Object.fromEntries(pairs);
-  }
-
-  function renderMoodImage(mood) {
-    return new Promise((resolve) => {
-      const canvas = document.createElement("canvas");
-      canvas.width = 64;
-      canvas.height = 64;
-      const context = canvas.getContext("2d");
-
-      if (!context) {
-        resolve(null);
-        return;
-      }
-
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-      context.font = '44px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
-      context.fillText(mood, canvas.width / 2, canvas.height / 2 + 2);
-
-      requestAnimationFrame(() => resolve(canvas.toDataURL("image/png")));
-    });
-  }
-
-  function buildPdfDocument(entries, createdAt, filters, moodImages) {
+  function buildPdfDocument(entries, createdAt, filters) {
     const groupedCounts = entries.reduce((counts, entry) => {
       counts[entry.status] = (counts[entry.status] || 0) + 1;
       return counts;
     }, {});
+    const moodSummary = buildMoodSummary(entries);
 
     const content = [
       { text: "Relatorio de Reviews", style: "title" },
@@ -353,42 +325,19 @@
         ],
         columnGap: 8,
         margin: [0, 0, 0, 16]
-      }
+      },
+      { text: "Resumo de estados de espirito", style: "sectionTitle" },
+      ...buildMoodSummaryContent(moodSummary, entries.length)
     ];
 
     entries.forEach((entry, index) => {
-      const titleColumns = [];
-      const moodImage = moodImages[entry.mood];
-
-      if (moodImage) {
-        titleColumns.push({
-          image: moodImage,
-          width: 18,
-          height: 18,
-          margin: [0, 0, 6, 0]
-        });
-      }
-
-      titleColumns.push({
-        text: buildEntryTitle(entry, index),
-        style: "entryTitle"
-      });
-
       content.push(
-        {
-          columns: titleColumns,
-          columnGap: 0,
-          margin: [0, 0, 0, 4]
-        },
+        { text: `${index + 1}. ${entry.name || "Anonimo"}`, style: "entryTitle" },
         {
           columns: [
             { text: `Estado: ${translateStatus(entry.status)}`, style: "meta" },
             { text: `Criada: ${api.formatDateTime(entry.created_at)}`, style: "meta", alignment: "right" }
           ]
-        },
-        {
-          text: buildMoodMeta(entry),
-          style: "meta"
         },
         {
           text: entry.moderated_at ? `Moderada: ${api.formatDateTime(entry.moderated_at)}` : "Moderada: Ainda nao",
@@ -440,6 +389,12 @@
           color: "#4b6788",
           margin: [0, 0, 0, 14]
         },
+        sectionTitle: {
+          fontSize: 12,
+          bold: true,
+          color: "#0a58b5",
+          margin: [0, 0, 0, 8]
+        },
         summaryChip: {
           fillColor: "#edf5ff",
           color: "#0a58b5",
@@ -455,6 +410,11 @@
           fontSize: 9,
           color: "#4b6788",
           margin: [0, 0, 0, 2]
+        },
+        metaStrong: {
+          fontSize: 9,
+          bold: true,
+          color: "#11243d"
         },
         comment: {
           margin: [0, 4, 0, 12],
@@ -485,23 +445,64 @@
     return labels.join(" | ");
   }
 
-  function buildMoodMeta(entry) {
-    if (!entry.mood) {
-      return "Humor: sem mood";
-    }
+  function buildMoodSummary(entries) {
+    const summary = {};
 
-    return `Humor: ${describeMood(entry.mood)}`;
+    api.moods.forEach((mood) => {
+      summary[mood] = 0;
+    });
+
+    entries.forEach((entry) => {
+      if (entry.mood && Object.prototype.hasOwnProperty.call(summary, entry.mood)) {
+        summary[entry.mood] += 1;
+      }
+    });
+
+    return summary;
   }
 
-  function buildEntryTitle(entry, index) {
-    const name = entry.name || "Anonimo";
-    const moodLabel = describeMood(entry.mood);
+  function buildMoodSummaryContent(summary, total) {
+    return api.moods.map((mood) => {
+      const count = Number(summary[mood] || 0);
+      const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
 
-    if (!entry.mood) {
-      return `${index + 1}. ${name} - sem mood`;
-    }
-
-    return `${index + 1}. ${name} - ${moodLabel}`;
+      return {
+        columns: [
+          { text: describeMood(mood), width: 110, style: "metaStrong" },
+          {
+            stack: [
+              {
+                canvas: [
+                  {
+                    type: "rect",
+                    x: 0,
+                    y: 0,
+                    w: 220,
+                    h: 8,
+                    color: "#edf5ff",
+                    lineColor: "#edf5ff"
+                  },
+                  {
+                    type: "rect",
+                    x: 0,
+                    y: 0,
+                    w: Math.max(percentage * 2.2, count > 0 ? 6 : 0),
+                    h: 8,
+                    color: "#1475d6",
+                    lineColor: "#1475d6"
+                  }
+                ]
+              }
+            ],
+            width: "*",
+            margin: [0, 6, 0, 0]
+          },
+          { text: `${count} (${percentage}%)`, width: 64, alignment: "right", style: "metaStrong" }
+        ],
+        columnGap: 10,
+        margin: [0, 0, 0, 8]
+      };
+    }).concat([{ text: "", margin: [0, 0, 0, 10] }]);
   }
 
   function describeMood(mood) {
