@@ -492,13 +492,13 @@ button:focus-visible,
 .qr-card {
   width: min(96vw, 72rem);
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   padding: 1.75rem;
 }
 
 .qr-visuals {
   display: grid;
-  grid-template-columns: minmax(0, 10.5rem) minmax(0, 26rem);
+  grid-template-columns: minmax(0, 14.75rem) minmax(0, 26rem);
   gap: 1.2rem;
   align-items: start;
   justify-content: center;
@@ -508,12 +508,14 @@ button:focus-visible,
   display: grid;
   gap: 0.8rem;
   align-items: start;
+  width: 100%;
 }
 
 .qr-copy {
   text-align: center;
   display: grid;
-  gap: 0.65rem;
+  gap: 0.45rem;
+  margin-top: -0.4rem;
 }
 
 .qr-code {
@@ -539,6 +541,7 @@ button:focus-visible,
   border-radius: 1.8rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(239, 247, 255, 0.94));
+  width: 100%;
 }
 
 .qr-mural-head {
@@ -557,14 +560,14 @@ button:focus-visible,
 }
 
 .qr-review-stage {
-  min-height: 18rem;
+  min-height: 16.5rem;
   display: grid;
   align-items: start;
 }
 
 .qr-postit {
   position: relative;
-  min-height: 17rem;
+  min-height: 15rem;
   padding: 1.15rem 1rem 1rem;
   border-radius: 0.5rem 1.2rem 0.7rem 1rem;
   box-shadow:
@@ -642,8 +645,8 @@ button:focus-visible,
 
 .qr-postit-text {
   margin: 0;
-  font-size: 1.12rem;
-  line-height: 1.5;
+  font-size: 1.08rem;
+  line-height: 1.48;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
