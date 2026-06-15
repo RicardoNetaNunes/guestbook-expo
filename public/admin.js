@@ -370,7 +370,7 @@
       }
 
       titleColumns.push({
-        text: `${index + 1}. ${entry.name || "Anonimo"}`,
+        text: buildEntryTitle(entry, index),
         style: "entryTitle"
       });
 
@@ -491,6 +491,17 @@
     }
 
     return `Humor: ${describeMood(entry.mood)}`;
+  }
+
+  function buildEntryTitle(entry, index) {
+    const name = entry.name || "Anonimo";
+    const moodLabel = describeMood(entry.mood);
+
+    if (!entry.mood) {
+      return `${index + 1}. ${name} - sem mood`;
+    }
+
+    return `${index + 1}. ${name} - ${moodLabel}`;
   }
 
   function describeMood(mood) {
