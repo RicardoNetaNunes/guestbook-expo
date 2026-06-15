@@ -485,7 +485,7 @@ button:focus-visible,
 
 .qr-stage {
   display: grid;
-  grid-template-columns: 24rem minmax(0, 1fr);
+  grid-template-columns: 36rem minmax(0, 1fr);
   gap: 1.25rem;
   align-items: center;
   width: min(100%, 98rem);
@@ -565,7 +565,7 @@ button:focus-visible,
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(239, 247, 255, 0.94));
   width: 100%;
-  max-width: 21rem;
+  max-width: 31.5rem;
   justify-self: center;
 }
 
@@ -584,7 +584,7 @@ button:focus-visible,
 }
 
 .qr-review-stage {
-  min-height: 22rem;
+  min-height: 33rem;
   display: grid;
   align-items: start;
 }
@@ -594,7 +594,7 @@ button:focus-visible,
   width: 100%;
   min-height: 0;
   aspect-ratio: 1 / 1;
-  padding: 1.35rem 1.25rem 1.15rem;
+  padding: 2rem 1.85rem 1.65rem;
   border-radius: 0.5rem 1.2rem 0.7rem 1rem;
   box-shadow:
     0 1.2rem 2.4rem rgba(17, 36, 61, 0.16),
@@ -657,7 +657,7 @@ button:focus-visible,
 }
 
 .qr-postit-mood {
-  font-size: 1.8rem;
+  font-size: 2.7rem;
   line-height: 1;
 }
 
@@ -666,20 +666,20 @@ button:focus-visible,
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  font-size: 0.95rem;
+  font-size: 1.4rem;
 }
 
 .qr-postit-text {
   margin: 0;
-  font-size: 1.28rem;
-  line-height: 1.56;
+  font-size: 1.92rem;
+  line-height: 1.5;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
 .qr-postit-time {
   margin: 1rem 0 0;
-  font-size: 1rem;
+  font-size: 1.45rem;
   opacity: 0.78;
 }
 
