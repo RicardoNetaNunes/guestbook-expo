@@ -485,12 +485,21 @@ button:focus-visible,
 
 .qr-stage {
   display: grid;
-  gap: 1rem;
-  justify-items: center;
+  grid-template-columns: 24rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+  width: min(100%, 98rem);
+  margin: 0 auto;
+}
+
+.qr-mural-shell {
+  display: grid;
+  align-items: start;
+  padding-top: 8rem;
 }
 
 .qr-card {
-  width: min(98vw, 82rem);
+  width: min(100%, 82rem);
   display: grid;
   gap: 1rem;
   padding: 1.75rem;
@@ -498,18 +507,10 @@ button:focus-visible,
 
 .qr-visuals {
   display: grid;
-  grid-template-columns: 24rem 20rem;
-  gap: 2.25rem;
+  grid-template-columns: minmax(0, 8rem) minmax(0, 20rem);
+  gap: 2.5rem;
   align-items: start;
   justify-content: center;
-}
-
-.qr-column {
-  display: grid;
-  gap: 0.9rem;
-  align-items: start;
-  width: 24rem;
-  justify-self: center;
 }
 
 .qr-copy {
@@ -534,7 +535,8 @@ button:focus-visible,
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  justify-self: center;
+  justify-self: end;
+  margin-top: 1rem;
 }
 
 .qr-mural {
@@ -733,6 +735,17 @@ button:focus-visible,
 }
 
 @media (max-width: 640px) {
+  .qr-stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .qr-mural-shell {
+    padding-top: 0;
+    justify-items: center;
+  }
+
   .mood-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -766,10 +779,6 @@ button:focus-visible,
 
   .qr-visuals {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .qr-column {
-    width: min(100%, 19rem);
   }
 
   .qr-mural-head {
