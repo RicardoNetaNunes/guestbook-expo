@@ -499,6 +499,7 @@ button:focus-visible,
 
 .qr-card {
   width: min(100%, 82rem);
+  min-height: 70vh;
   display: grid;
   gap: 1rem;
   padding: 1.75rem;
