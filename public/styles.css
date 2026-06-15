@@ -532,23 +532,21 @@ button:focus-visible,
 .qr-logo-frame {
   width: min(100%, 20rem);
   height: 20rem;
-  overflow: hidden;
   display: grid;
   justify-self: center;
   align-self: start;
 }
 
 .qr-logo {
-  width: 20rem;
-  max-width: none;
+  width: min(100%, 20rem);
+  max-width: 100%;
   padding: 0;
   background: transparent;
   border-radius: 0;
   box-shadow: none;
   justify-self: center;
   margin-top: 0;
-  transform: scale(1.62) translateY(1.2rem);
-  transform-origin: top center;
+  object-fit: contain;
 }
 
 .qr-mural {

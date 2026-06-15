@@ -13,6 +13,7 @@ const requiredFiles = [
   "public/config.js",
   "public/styles.css",
   "public/logo.png",
+  "public/logo-qr.png",
   "public/qr.png",
   "public/qr.svg",
   "deploy/github-pages/README.md",
