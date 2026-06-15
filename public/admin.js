@@ -10,6 +10,10 @@
   const loginButton = document.querySelector("#login-button");
   const authStatus = document.querySelector("#auth-status");
   const logoutButton = document.querySelector("#logout-button");
+  const exportPdfButton = document.querySelector("#export-pdf-button");
+  const exportStatusField = document.querySelector("#export-status");
+  const exportDateFromField = document.querySelector("#export-date-from");
+  const exportDateToField = document.querySelector("#export-date-to");
   const sessionTitle = document.querySelector("#session-title");
   const sessionCopy = document.querySelector("#session-copy");
   let activeStatus = "pending";
@@ -39,6 +43,7 @@
     supabase = api.createClient();
     loginForm.addEventListener("submit", handleLogin);
     logoutButton.addEventListener("click", handleLogout);
+    exportPdfButton.addEventListener("click", handleExportPdf);
 
     const { data } = await supabase.auth.getSession();
     await syncSession(data.session || null);
@@ -223,11 +228,215 @@
     }
   }
 
+  async function handleExportPdf() {
+    const filters = readExportFilters();
+    if (!filters) {
+      return;
+    }
+
+    exportPdfButton.disabled = true;
+    setStatus("A preparar o PDF com os filtros selecionados...", "success");
+
+    try {
+      const entries = await fetchAllEntries(filters);
+      if (!entries.length) {
+        setStatus("Nao existem mensagens para exportar com esses filtros.", "error");
+        return;
+      }
+
+      if (!window.pdfMake || typeof window.pdfMake.createPdf !== "function") {
+        throw new Error("A biblioteca de PDF nao foi carregada.");
+      }
+
+      const createdAt = new Date();
+      const filename = buildPdfFileName(createdAt, filters);
+      window.pdfMake.createPdf(buildPdfDocument(entries, createdAt, filters)).download(filename);
+      setStatus(`PDF gerado com ${entries.length} mensagem(ns).`, "success");
+    } catch (error) {
+      setStatus(api.humanizeError(error, "Nao foi possivel gerar o PDF."), "error");
+    } finally {
+      exportPdfButton.disabled = false;
+    }
+  }
+
+  function readExportFilters() {
+    const status = exportStatusField.value;
+    const dateFrom = exportDateFromField.value;
+    const dateTo = exportDateToField.value;
+
+    if (dateFrom && dateTo && dateFrom > dateTo) {
+      setStatus("A data inicial nao pode ser posterior a data final.", "error");
+      return null;
+    }
+
+    return { status, dateFrom, dateTo };
+  }
+
+  async function fetchAllEntries(filters) {
+    let query = supabase
+      .from("feedback")
+      .select("id, comment, mood, name, status, created_at, moderated_at")
+      .order("created_at", { ascending: false });
+
+    if (filters.status && filters.status !== "all") {
+      query = query.eq("status", filters.status);
+    }
+
+    if (filters.dateFrom) {
+      query = query.gte("created_at", `${filters.dateFrom}T00:00:00`);
+    }
+
+    if (filters.dateTo) {
+      query = query.lte("created_at", `${filters.dateTo}T23:59:59.999`);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    return data || [];
+  }
+
+  function buildPdfDocument(entries, createdAt, filters) {
+    const groupedCounts = entries.reduce((counts, entry) => {
+      counts[entry.status] = (counts[entry.status] || 0) + 1;
+      return counts;
+    }, {});
+
+    const content = [
+      { text: "Relatorio de Reviews", style: "title" },
+      {
+        text: `Gerado em ${api.formatDateTime(createdAt.toISOString())}`,
+        style: "subtitle"
+      },
+      {
+        text: describeFilters(filters),
+        style: "filters"
+      },
+      {
+        columns: [
+          { text: `Total: ${entries.length}`, style: "summaryChip" },
+          { text: `Pendentes: ${groupedCounts.pending || 0}`, style: "summaryChip" },
+          { text: `Aprovadas: ${groupedCounts.approved || 0}`, style: "summaryChip" },
+          { text: `Rejeitadas: ${groupedCounts.rejected || 0}`, style: "summaryChip" }
+        ],
+        columnGap: 8,
+        margin: [0, 0, 0, 16]
+      }
+    ];
+
+    entries.forEach((entry, index) => {
+      content.push(
+        { text: `${index + 1}. ${entry.name || "Anonimo"} ${entry.mood || ""}`, style: "entryTitle" },
+        {
+          columns: [
+            { text: `Estado: ${translateStatus(entry.status)}`, style: "meta" },
+            { text: `Criada: ${api.formatDateTime(entry.created_at)}`, style: "meta", alignment: "right" }
+          ]
+        },
+        {
+          text: entry.moderated_at ? `Moderada: ${api.formatDateTime(entry.moderated_at)}` : "Moderada: Ainda nao",
+          style: "meta"
+        },
+        { text: entry.comment || "-", style: "comment" }
+      );
+
+      if (index < entries.length - 1) {
+        content.push({
+          canvas: [
+            {
+              type: "line",
+              x1: 0,
+              y1: 0,
+              x2: 515,
+              y2: 0,
+              lineWidth: 1,
+              lineColor: "#d7e3f2"
+            }
+          ],
+          margin: [0, 4, 0, 12]
+        });
+      }
+    });
+
+    return {
+      pageSize: "A4",
+      pageMargins: [40, 48, 40, 48],
+      content,
+      defaultStyle: {
+        fontSize: 11,
+        color: "#11243d"
+      },
+      styles: {
+        title: {
+          fontSize: 20,
+          bold: true,
+          color: "#0a58b5",
+          margin: [0, 0, 0, 4]
+        },
+        subtitle: {
+          fontSize: 10,
+          color: "#4b6788",
+          margin: [0, 0, 0, 6]
+        },
+        filters: {
+          fontSize: 10,
+          color: "#4b6788",
+          margin: [0, 0, 0, 14]
+        },
+        summaryChip: {
+          fillColor: "#edf5ff",
+          color: "#0a58b5",
+          margin: [0, 0, 0, 8],
+          bold: true
+        },
+        entryTitle: {
+          fontSize: 13,
+          bold: true,
+          margin: [0, 0, 0, 4]
+        },
+        meta: {
+          fontSize: 9,
+          color: "#4b6788",
+          margin: [0, 0, 0, 2]
+        },
+        comment: {
+          margin: [0, 4, 0, 12],
+          lineHeight: 1.3
+        }
+      }
+    };
+  }
+
+  function buildPdfFileName(createdAt, filters) {
+    const parts = [
+      createdAt.getFullYear(),
+      String(createdAt.getMonth() + 1).padStart(2, "0"),
+      String(createdAt.getDate()).padStart(2, "0")
+    ];
+
+    const suffix = filters.status && filters.status !== "all" ? `-${filters.status}` : "-todos";
+    return `reviews-${parts.join("-")}${suffix}.pdf`;
+  }
+
+  function describeFilters(filters) {
+    const labels = [];
+
+    labels.push(`Estado: ${filters.status === "all" ? "todos" : translateStatus(filters.status)}`);
+    labels.push(`De: ${filters.dateFrom || "inicio"}`);
+    labels.push(`Ate: ${filters.dateTo || "hoje"}`);
+
+    return labels.join(" | ");
+  }
+
   async function syncSession(session) {
     const isAuthenticated = Boolean(session && session.user);
     authCard.classList.toggle("hidden", isAuthenticated);
     sessionCard.classList.toggle("hidden", !isAuthenticated);
     moderationPanel.classList.toggle("hidden", !isAuthenticated);
+    exportPdfButton.disabled = !isAuthenticated;
 
     if (!isAuthenticated) {
       sessionTitle.textContent = "Sem sessao ativa";

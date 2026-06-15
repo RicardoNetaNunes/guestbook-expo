@@ -38,7 +38,8 @@ body {
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
 }
 
@@ -183,7 +184,8 @@ h3 {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 1rem;
@@ -198,6 +200,7 @@ textarea {
 
 input:focus-visible,
 textarea:focus-visible,
+select:focus-visible,
 button:focus-visible,
 .mood-option:focus-visible,
 .tab-button:focus-visible {
@@ -393,9 +396,43 @@ button:focus-visible,
   flex-wrap: wrap;
 }
 
+.panel-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.panel-toolbar-main {
+  display: grid;
+  gap: 0.85rem;
+  flex: 1 1 30rem;
+}
+
+.export-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.export-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.export-field label {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .tab-button.active {
   background: linear-gradient(135deg, rgba(20, 117, 214, 0.16), rgba(255, 36, 49, 0.12));
   color: var(--blue-strong);
+}
+
+#export-pdf-button {
+  white-space: nowrap;
 }
 
 .admin-actions {
@@ -569,6 +606,15 @@ button:focus-visible,
   .admin-toolbar {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .panel-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .export-controls {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .qr-card {

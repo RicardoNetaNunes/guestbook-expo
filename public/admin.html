@@ -55,10 +55,34 @@
       </section>
 
       <section id="moderation-panel" class="card admin-panel hidden">
-        <div class="tabs" role="tablist" aria-label="Filtros por estado">
-          <button class="tab-button active" data-status="pending" role="tab" aria-selected="true">Pendentes</button>
-          <button class="tab-button" data-status="approved" role="tab" aria-selected="false">Aprovadas</button>
-          <button class="tab-button" data-status="rejected" role="tab" aria-selected="false">Rejeitadas</button>
+        <div class="panel-toolbar">
+          <div class="panel-toolbar-main">
+            <div class="tabs" role="tablist" aria-label="Filtros por estado">
+              <button class="tab-button active" data-status="pending" role="tab" aria-selected="true">Pendentes</button>
+              <button class="tab-button" data-status="approved" role="tab" aria-selected="false">Aprovadas</button>
+              <button class="tab-button" data-status="rejected" role="tab" aria-selected="false">Rejeitadas</button>
+            </div>
+            <div class="export-controls" aria-label="Filtros de exportacao">
+              <div class="export-field">
+                <label for="export-status">Estado no PDF</label>
+                <select id="export-status">
+                  <option value="all">Todos</option>
+                  <option value="pending">Pendentes</option>
+                  <option value="approved">Aprovadas</option>
+                  <option value="rejected">Rejeitadas</option>
+                </select>
+              </div>
+              <div class="export-field">
+                <label for="export-date-from">Data inicial</label>
+                <input id="export-date-from" type="date">
+              </div>
+              <div class="export-field">
+                <label for="export-date-to">Data final</label>
+                <input id="export-date-to" type="date">
+              </div>
+            </div>
+          </div>
+          <button id="export-pdf-button" class="ghost-button" type="button">Exportar PDF</button>
         </div>
         <div id="admin-status" class="status hidden" aria-live="polite"></div>
         <div id="admin-list" class="admin-list"></div>
@@ -66,6 +90,8 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js"></script>
     <script src="config.js"></script>
     <script src="common.js"></script>
     <script src="admin.js"></script>
