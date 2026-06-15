@@ -504,6 +504,12 @@ button:focus-visible,
   justify-content: center;
 }
 
+.qr-column {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
 .qr-copy {
   text-align: center;
   display: grid;
@@ -524,6 +530,136 @@ button:focus-visible,
   background: transparent;
   border-radius: 0;
   box-shadow: none;
+}
+
+.qr-mural {
+  padding: 1rem;
+  border-radius: 1.8rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(239, 247, 255, 0.94));
+}
+
+.qr-mural-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: start;
+  margin-bottom: 0.85rem;
+}
+
+.qr-mural-count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.qr-review-stage {
+  min-height: 16rem;
+  display: grid;
+  align-items: start;
+}
+
+.qr-postit {
+  position: relative;
+  min-height: 15rem;
+  padding: 1.1rem 1rem 1rem;
+  border-radius: 0.5rem 1.2rem 0.7rem 1rem;
+  box-shadow:
+    0 1.2rem 2.4rem rgba(17, 36, 61, 0.16),
+    inset 0 -0.45rem 0 rgba(17, 36, 61, 0.05);
+  transform-origin: top center;
+  overflow: hidden;
+}
+
+.qr-postit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent 35%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(17, 36, 61, 0.06));
+  pointer-events: none;
+}
+
+.qr-postit-yellow {
+  background: linear-gradient(180deg, #fff0a8, #ffe47a);
+  color: #5a4200;
+  transform: rotate(-2deg);
+}
+
+.qr-postit-blue {
+  background: linear-gradient(180deg, #dff4ff, #bde5ff);
+  color: #0d4978;
+  transform: rotate(1.4deg);
+}
+
+.qr-postit-rose {
+  background: linear-gradient(180deg, #ffe3e1, #ffc7c2);
+  color: #7d2330;
+  transform: rotate(-1deg);
+}
+
+.qr-postit-empty {
+  background: linear-gradient(180deg, #eff6ff, #dfeeff);
+  color: var(--muted);
+  transform: rotate(-1deg);
+}
+
+.qr-postit-enter {
+  animation: postit-in 420ms ease;
+}
+
+.qr-postit-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.qr-postit-pin {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, #ffffff, #ff4d59 45%, #b51424 100%);
+  box-shadow: 0 0.25rem 0.5rem rgba(181, 20, 36, 0.28);
+}
+
+.qr-postit-mood {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.qr-postit-label {
+  margin: 0 0 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.qr-postit-text {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.qr-postit-time {
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  opacity: 0.78;
+}
+
+@keyframes postit-in {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem) rotate(-4deg) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .poster-dots,
@@ -623,6 +759,11 @@ button:focus-visible,
 
   .qr-visuals {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qr-mural-head {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .qr-logo,

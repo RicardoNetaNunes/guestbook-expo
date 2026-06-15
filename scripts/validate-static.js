@@ -8,6 +8,7 @@ const requiredFiles = [
   "public/qr.html",
   "public/app.js",
   "public/admin.js",
+  "public/qr.js",
   "public/common.js",
   "public/config.js",
   "public/styles.css",
