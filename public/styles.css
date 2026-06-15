@@ -499,8 +499,9 @@ button:focus-visible,
 
 .qr-card {
   width: min(100%, 82rem);
-  min-height: 70vh;
+  height: 70vh;
   display: grid;
+  align-content: start;
   gap: 1rem;
   padding: 1.75rem;
 }
@@ -529,13 +530,13 @@ button:focus-visible,
 }
 
 .qr-logo {
-  width: 6.1rem;
+  width: min(100%, 20rem);
   max-width: 100%;
   padding: 0;
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  justify-self: end;
+  justify-self: center;
   margin-top: 1rem;
 }
 
