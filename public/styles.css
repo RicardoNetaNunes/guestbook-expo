@@ -531,7 +531,7 @@ button:focus-visible,
 
 .qr-logo-frame {
   width: min(100%, 20rem);
-  height: 20rem;
+  aspect-ratio: 1 / 1;
   display: grid;
   justify-self: center;
   align-self: start;
