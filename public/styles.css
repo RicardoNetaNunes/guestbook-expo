@@ -535,10 +535,15 @@ button:focus-visible,
   display: grid;
   justify-self: center;
   align-self: start;
+  background: white;
+  padding: 1rem;
+  border-radius: 2rem;
+  box-shadow: var(--shadow);
 }
 
 .qr-logo {
-  width: min(100%, 20rem);
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   padding: 0;
   background: transparent;
