@@ -250,7 +250,8 @@
 
       const createdAt = new Date();
       const filename = buildPdfFileName(createdAt, filters);
-      window.pdfMake.createPdf(buildPdfDocument(entries, createdAt, filters)).download(filename);
+      const moodImages = await buildMoodImages(entries);
+      window.pdfMake.createPdf(buildPdfDocument(entries, createdAt, filters, moodImages)).download(filename);
       setStatus(`PDF gerado com ${entries.length} mensagem(ns).`, "success");
     } catch (error) {
       setStatus(api.humanizeError(error, "Nao foi possivel gerar o PDF."), "error");
@@ -299,7 +300,35 @@
     return data || [];
   }
 
-  function buildPdfDocument(entries, createdAt, filters) {
+  async function buildMoodImages(entries) {
+    const uniqueMoods = Array.from(new Set(entries.map((entry) => entry.mood).filter(Boolean)));
+    const pairs = await Promise.all(uniqueMoods.map(async (mood) => [mood, await renderMoodImage(mood)]));
+    return Object.fromEntries(pairs);
+  }
+
+  function renderMoodImage(mood) {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 64;
+      canvas.height = 64;
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        resolve(null);
+        return;
+      }
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.font = '44px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+      context.fillText(mood, canvas.width / 2, canvas.height / 2 + 2);
+
+      requestAnimationFrame(() => resolve(canvas.toDataURL("image/png")));
+    });
+  }
+
+  function buildPdfDocument(entries, createdAt, filters, moodImages) {
     const groupedCounts = entries.reduce((counts, entry) => {
       counts[entry.status] = (counts[entry.status] || 0) + 1;
       return counts;
@@ -328,13 +357,38 @@
     ];
 
     entries.forEach((entry, index) => {
+      const titleColumns = [];
+      const moodImage = moodImages[entry.mood];
+
+      if (moodImage) {
+        titleColumns.push({
+          image: moodImage,
+          width: 18,
+          height: 18,
+          margin: [0, 0, 6, 0]
+        });
+      }
+
+      titleColumns.push({
+        text: `${index + 1}. ${entry.name || "Anonimo"}`,
+        style: "entryTitle"
+      });
+
       content.push(
-        { text: `${index + 1}. ${entry.name || "Anonimo"} ${entry.mood || ""}`, style: "entryTitle" },
+        {
+          columns: titleColumns,
+          columnGap: 0,
+          margin: [0, 0, 0, 4]
+        },
         {
           columns: [
             { text: `Estado: ${translateStatus(entry.status)}`, style: "meta" },
             { text: `Criada: ${api.formatDateTime(entry.created_at)}`, style: "meta", alignment: "right" }
           ]
+        },
+        {
+          text: buildMoodMeta(entry),
+          style: "meta"
         },
         {
           text: entry.moderated_at ? `Moderada: ${api.formatDateTime(entry.moderated_at)}` : "Moderada: Ainda nao",
@@ -429,6 +483,37 @@
     labels.push(`Ate: ${filters.dateTo || "hoje"}`);
 
     return labels.join(" | ");
+  }
+
+  function buildMoodMeta(entry) {
+    if (!entry.mood) {
+      return "Humor: sem mood";
+    }
+
+    return `Humor: ${describeMood(entry.mood)}`;
+  }
+
+  function describeMood(mood) {
+    if (mood === "🤯") {
+      return "impactado";
+    }
+    if (mood === "🎨") {
+      return "criativo";
+    }
+    if (mood === "🥳") {
+      return "entusiasmado";
+    }
+    if (mood === "😌") {
+      return "calmo";
+    }
+    if (mood === "🤖") {
+      return "tecnologico";
+    }
+    if (mood === "👽") {
+      return "surpreendido";
+    }
+
+    return mood;
   }
 
   async function syncSession(session) {
