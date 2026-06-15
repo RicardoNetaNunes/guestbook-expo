@@ -487,15 +487,14 @@ button:focus-visible,
   display: grid;
   grid-template-columns: 24rem minmax(0, 1fr);
   gap: 1.25rem;
-  align-items: start;
+  align-items: center;
   width: min(100%, 98rem);
   margin: 0 auto;
 }
 
 .qr-mural-shell {
   display: grid;
-  align-items: start;
-  padding-top: 8rem;
+  align-items: center;
 }
 
 .qr-card {
@@ -545,6 +544,8 @@ button:focus-visible,
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(239, 247, 255, 0.94));
   width: 100%;
+  max-width: 21rem;
+  justify-self: center;
 }
 
 .qr-mural-head {
@@ -742,7 +743,6 @@ button:focus-visible,
   }
 
   .qr-mural-shell {
-    padding-top: 0;
     justify-items: center;
   }
 
